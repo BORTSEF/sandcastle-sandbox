@@ -5,7 +5,85 @@ import Layout from '../layouts/Layout.astro';
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
+<!DOCTYPE html>
+<html lang="en">
 
-<Layout>
-	<Welcome />
-</Layout>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>I_Menstruate Movement</title>
+  </head>
+
+
+  <body>
+	
+	<div class=" Hero">
+		<img src=" ./assets/hero side A and B .png" alt="Hero Image" class="hero-image">	
+
+		<div class="top-left">	
+			<nav>
+				<ul>
+					<li><a href="/">Home</a></li>
+					<li><a href="/Who-Are-We">Who Are We</a></li>
+					<li><a href="/News">News</a></li>
+					<li><a href="/Resources-and-Publications">Resources and Publications</a></li>
+					<li><a href="/Gallery">Gallery</a></li>
+					<li><a href="/Donate">Donate</a></li>
+				</ul>
+			</nav>
+			
+		</div>
+
+		<div class="top-right">	</div>
+		<div class="top-middle"> 
+				<h1 class="title">I_Menstruate Movement</h1>
+				<p class="subtitle"> END PERIOD POVERTY</p>
+		</div>
+
+	</div>
+
+	<style> 
+
+	<!-- style for the hero and navigation -->
+		
+		.hero-image: background-size: cover;{
+			position: relative;
+			width: 100%;
+			height: auto;
+		}
+
+				.top-left {
+					position: absolute;
+					top: 20px;
+					left: 20px;
+				}
+
+				.top-right {
+					position: absolute;
+					top: 20px;
+					right: 20px;
+				}
+
+				.top-middle {
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+		}
+	
+		#nav ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		#h1 {
+			font-size: 48px;
+			color: white;
+		}
+
+	</style>
+
+
+	
+  </body>
