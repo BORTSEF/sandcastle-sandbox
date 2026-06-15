@@ -1,89 +1,552 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import cloudImage from '../assets/cloud v1.png';
+import groundImage from '../assets/OIP-1446910639.jpeg';
 ---
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>I_Menstruate Movement</title>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>I_Menstruate — Menstrual Equity Bill</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet" />
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg:   #f2ede4;
+        --dark: #171511;
+        --red:  #9b1c1c;
+        --mid:  #6b6560;
+      }
+
+      html { scroll-behavior: auto; }
+
+      body {
+        background: var(--bg);
+        color: var(--dark);
+        font-family: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+        overflow-x: hidden;
+      }
+
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0;
+      }
+
+      section {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 0 8vw;
+        position: relative;
+      }
+
+      #intro {
+        position: relative;
+        overflow: hidden;
+        pointer-events: none;
+        isolation: isolate;
+      }
+
+      .ground-container {
+        position: relative;
+        overflow: hidden;
+        min-height: 100vh;
+        z-index: 0;
+      }
+
+      .parallax {
+        position: absolute;
+        inset: 0;
+        background-repeat: no-repeat;
+        background-position: center;
+        pointer-events: none;
+        will-change: transform;
+      }
+
+      .parallax.ground {
+        z-index: 0;
+        background-image: var(--ground-image);
+        background-size: cover;
+        background-attachment: fixed;
+        opacity: 0.75;
+      }
+
+      .parallax.clouds {
+        z-index: 1;
+        background-image: var(--cloud-image);
+        background-size: 140% auto;
+        background-position: center 18%;
+        opacity: 0.25;
+        filter: saturate(1.05) contrast(1.02);
+        mix-blend-mode: screen;
+      }
+
+      .content { max-width: 480px; }
+
+      .content h2 {
+        font-size: clamp(3rem, 7vw, 6rem);
+        font-weight: 900;
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+        color: var(--dark);
+        opacity: 0;
+        transform: translateY(48px);
+      }
+
+      .content p {
+        margin-top: 1.4rem;
+        font-size: clamp(0.85rem, 1.4vw, 1rem);
+        font-weight: 400;
+        line-height: 1.7;
+        letter-spacing: 0.01em;
+        color: var(--mid);
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      section:nth-of-type(even) .content {
+        margin-left: auto;
+        text-align: right;
+      }
+
+      #s5 .content {
+        margin-left: 0;
+        text-align: left;
+      }
+
+      #wire-section {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 0;
+        position: relative;
+        z-index: 20;
+      }
+
+      #wire-section .wire-stat {
+        font-size: clamp(4rem, 12vw, 10rem);
+        font-weight: 900;
+        line-height: 0.9;
+        letter-spacing: -0.05em;
+        color: var(--dark);
+        opacity: 0;
+        transform: translateY(40px);
+      }
+
+      #wire-section .wire-label {
+        margin-top: 1.2rem;
+        font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+        font-weight: 400;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--mid);
+        opacity: 0;
+      }
+
+      #cta-section {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 2rem;
+      }
+
+      #cta-section h2 {
+        font-size: clamp(2rem, 5vw, 4rem);
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        color: var(--dark);
+        opacity: 0;
+        transform: translateY(30px);
+        max-width: 600px;
+      }
+
+      .cta-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      .cta-links a {
+        display: inline-block;
+        font-size: clamp(0.9rem, 1.5vw, 1rem);
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: var(--dark);
+        text-decoration: none;
+        border-bottom: 1.5px solid var(--dark);
+        padding-bottom: 0.1em;
+        transition: opacity 0.2s;
+      }
+
+      .cta-links a:hover { opacity: 0.4; }
+
+      #final {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      #final h1 {
+        font-size: clamp(4rem, 14vw, 11rem);
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        line-height: 0.88;
+        color: var(--red);
+        opacity: 0;
+        transform: translateY(60px);
+      }
+
+      #final p {
+        margin-top: 1.5rem;
+        font-size: clamp(0.85rem, 1.4vw, 1rem);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--mid);
+        opacity: 0;
+      }
+
+      .loading,
+      .scroll-cta {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 30;
+        color: var(--dark);
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .loading { top: 1.4rem; }
+      .scroll-cta { bottom: 1.4rem; opacity: 0; }
+
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.25; }
+      }
+
+      .scroll-cta.visible { animation: pulse 2s ease-in-out infinite; }
+    </style>
   </head>
 
-
   <body>
-	
-	<div class=" Hero">
-		<img src=" ./assets/hero side A and B .png" alt="Hero Image" class="hero-image">	
+    <div class="loading">Loading</div>
+    <div class="scroll-cta">Scroll</div>
 
-		<div class="top-left">	
-			<nav>
-				<ul>
-					<li><a href="/">Home</a></li>
-					<li><a href="/Who-Are-We">Who Are We</a></li>
-					<li><a href="/News">News</a></li>
-					<li><a href="/Resources-and-Publications">Resources and Publications</a></li>
-					<li><a href="/Gallery">Gallery</a></li>
-					<li><a href="/Donate">Donate</a></li>
-				</ul>
-			</nav>
-			
-		</div>
+    <section
+      id="intro"
+      class="ground-container"
+      style={{
+        '--ground-image': `url(${groundImage.src})`,
+        '--cloud-image': `url(${cloudImage.src})`,
+      }}
+    >
+      <div class="parallax ground" aria-hidden="true"></div>
+      <div class="parallax clouds" aria-hidden="true"></div>
+    </section>
 
-		<div class="top-right">	</div>
-		<div class="top-middle"> 
-				<h1 class="title">I_Menstruate Movement</h1>
-				<p class="subtitle"> END PERIOD POVERTY</p>
-		</div>
+    <section id="s2">
+      <div class="content">
+        <h2>52% of the population menstruates.</h2>
+        <p>Half the world bleeds. There are no legal protections.</p>
+      </div>
+    </section>
 
-	</div>
+    <section id="s3">
+      <div class="content">
+        <h2>Children miss school.</h2>
+        <p>Every month. Because of their period. Because of nothing else.</p>
+      </div>
+    </section>
 
-	<style> 
+    <section id="s4">
+      <div class="content">
+        <h2>Teens leave school entirely.</h2>
+        <p>Not failing. Not choosing. Forced out by shame and lack of access.</p>
+      </div>
+    </section>
 
-	<!-- style for the hero and navigation -->
-		
-		.hero-image: background-size: cover;{
-			position: relative;
-			width: 100%;
-			height: auto;
-		}
+    <section id="s5">
+      <div class="content">
+        <h2>Adults bleed in silence.</h2>
+        <p>Shamed. Ostracised. Penalised for a process they cannot control.</p>
+      </div>
+    </section>
 
-				.top-left {
-					position: absolute;
-					top: 20px;
-					left: 20px;
-				}
+    <section id="wire-section">
+      <div class="wire-stat">1 in 10</div>
+      <div class="wire-label">cannot afford period products</div>
+    </section>
 
-				.top-right {
-					position: absolute;
-					top: 20px;
-					right: 20px;
-				}
+    <section id="cta-section">
+      <h2>We're changing the law.</h2>
+      <div class="cta-links">
+        <a href="/bill-summary">Read the Menstrual Equity Bill →</a>
+        <a href="/progress">Steps to Parliament — where are we now →</a>
+        <a href="/help">How can you help? →</a>
+      </div>
+    </section>
 
-				.top-middle {
-					position: absolute;
-					top: 50%;
-					left: 50%;
-					transform: translate(-50%, -50%);
-		}
-	
-		#nav ul {
-			list-style-type: none;
-			margin: 0;
-			padding: 0;
-		}
+    <section id="final">
+      <h1>I_Menstruate</h1>
+      <p>We're changing the law to end period poverty.</p>
+    </section>
 
-		#h1 {
-			font-size: 48px;
-			color: white;
-		}
+    <script is:inline src="https://unpkg.com/three@0.117.1/build/three.min.js"></script>
+    <script is:inline src="https://unpkg.com/three@0.117.1/examples/js/loaders/OBJLoader.js"></script>
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.1/gsap.min.js"></script>
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.1/ScrollTrigger.min.js"></script>
 
-	</style>
+    <script is:inline>
+      class Scene {
+        constructor(model) {
+          this.views = [
+            { bottom: 0, height: 1 },
+            { bottom: 0, height: 0 },
+          ];
+
+          this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+          this.renderer.setSize(window.innerWidth, window.innerHeight);
+          this.renderer.setPixelRatio(window.devicePixelRatio);
+          document.body.appendChild(this.renderer.domElement);
+
+          this.scene = new THREE.Scene();
+
+          for (let ii = 0; ii < this.views.length; ii++) {
+            const view = this.views[ii];
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+            camera.position.fromArray([0, 0, 120]);
+            camera.layers.disableAll();
+            camera.layers.enable(ii);
+            view.camera = camera;
+          }
+
+          const dLight1 = new THREE.DirectionalLight(0xfff0f0, 1.1);
+          dLight1.position.set(5, 10, 10);
+          const dLight2 = new THREE.DirectionalLight(0xff9999, 0.5);
+          dLight2.position.set(-5, -8, 8);
+          const aLight = new THREE.AmbientLight(0xffffff, 0.3);
+          this.scene.add(dLight1, dLight2, aLight);
+
+          this.modelGroup = new THREE.Group();
+          this.scene.add(this.modelGroup);
+          this.modelGroup.add(model);
+
+          model.traverse(child => {
+            if (child.isMesh) {
+              child.material = new THREE.MeshPhongMaterial({
+                color: 0x8b0000,
+                specular: 0xff6666,
+                shininess: 40,
+                flatShading: true,
+              });
+              child.layers.set(0);
+            }
+          });
+
+          const wireClone = model.clone(true);
+          wireClone.traverse(child => {
+            if (child.isMesh) {
+              child.material = new THREE.MeshPhongMaterial({
+                color: 0x171511,
+                specular: 0xD0CBC7,
+                shininess: 5,
+                flatShading: true,
+                wireframe: true,
+              });
+              child.layers.set(1);
+            }
+          });
+          this.modelGroup.add(wireClone);
+
+          window.addEventListener('resize', () => this.onWindowResize());
+          this._loop();
+        }
+
+        _loop() {
+          requestAnimationFrame(() => this._loop());
+          this.render();
+        }
+
+        render() {
+          this.w = window.innerWidth;
+          this.h = window.innerHeight;
+
+          for (let ii = 0; ii < this.views.length; ii++) {
+            const view = this.views[ii];
+            const camera = view.camera;
+            const bottom = Math.floor(this.h * view.bottom);
+            const height = Math.floor(this.h * view.height);
+
+            if (height === 0) continue;
+
+            this.renderer.setViewport(0, bottom, this.w, height);
+            this.renderer.setScissor(0, bottom, this.w, height);
+            this.renderer.setScissorTest(true);
+
+            const camZ = (this.w / this.h > 1) ? 120 : 260;
+            camera.position.z = camZ;
+            camera.aspect = this.w / this.h;
+            camera.updateProjectionMatrix();
+
+            this.renderer.render(this.scene, camera);
+          }
+        }
+
+        onWindowResize() {
+          this.renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+      }
+
+      function loadModel() {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const loader = new THREE.OBJLoader();
+        loader.load('/blood-drop.obj', (object) => {
+          const box = new THREE.Box3().setFromObject(object);
+          const size = new THREE.Vector3();
+          const center = new THREE.Vector3();
+          box.getSize(size);
+          box.getCenter(center);
+
+          const maxDim = Math.max(size.x, size.y, size.z);
+          const targetSize = 90;
+          const normScale = targetSize / maxDim;
+
+          object.scale.setScalar(normScale);
+          object.position.set(-center.x * normScale, -center.y * normScale, -center.z * normScale);
+
+          setupAnimation(object);
+        }, undefined, (err) => console.error('[blood-drop] OBJ load failed:', err));
+      }
+
+      function setupAnimation(model) {
+        const scene = new Scene(model);
+        const drop = scene.modelGroup;
+
+        gsap.fromTo('canvas', { autoAlpha: 0, scale: 1.06 }, { autoAlpha: 1, scale: 1, duration: 1.4, ease: 'power2.out' });
+
+        gsap.to('.loading', { autoAlpha: 0, duration: 0.4 });
+
+        gsap.to('.scroll-cta', {
+          opacity: 1,
+          duration: 0.6,
+          delay: 1.2,
+          onComplete: () => document.querySelector('.scroll-cta').classList.add('visible'),
+        });
 
 
-	
+        const tau = Math.PI * 2;
+        gsap.set(drop.position, { x: 0, y: -10, z: 0 });
+        gsap.set(drop.rotation, { x: 0.35, y: -tau * 0.25, z: 0 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: 'body',
+            scrub: 1.5,
+            start: 'top top',
+            end: 'bottom bottom',
+          },
+          defaults: { ease: 'power2.inOut' },
+        });
+
+        tl.to('.scroll-cta', { opacity: 0, duration: 5 }, 0);
+
+        tl.to(drop.position, { x: 52, y: 0, z: 0, duration: 28 }, 0)
+          .to(drop.rotation, { x: 0.1, y: 0, z: 0, duration: 28 }, 0);
+
+        tl.to(drop.rotation, { x: 0, y: tau * 0.2, z: -0.18, duration: 14 }, 28)
+          .to(drop.position, { x: -45, y: 8, z: -10, duration: 14 }, 28);
+
+        tl.to(drop.rotation, { x: 0.05, y: 0, z: 0, duration: 14 }, 42)
+          .to(drop.position, { x: 0, y: 10, z: 0, duration: 14 }, 42);
+
+        tl.to(drop.rotation, { x: 0, y: -tau * 0.08, z: 0.12, duration: 14 }, 56)
+          .to(drop.position, { x: 48, y: 0, z: -15, duration: 14 }, 56);
+
+        tl.to(drop.rotation, { x: 0.1, y: tau, z: 0, duration: 14 }, 70)
+          .to(drop.position, { x: 0, y: 0, z: 0, duration: 14 }, 70);
+
+        tl.to(drop.position, { x: 0, y: 8, z: 0, duration: 16 }, 84)
+          .to(drop.rotation, { x: 0, y: tau * 0.05, z: 0, duration: 16 }, 84);
+
+        ScrollTrigger.create({
+          trigger: '#wire-section',
+          start: 'top 55%',
+          end: 'bottom 45%',
+          scrub: true,
+          onEnter: () => {
+            gsap.to(scene.views[1], { height: 1, bottom: 0, duration: 0.8, ease: 'power2.inOut' });
+            gsap.to(scene.views[0], { height: 0, bottom: 1, duration: 0.8, ease: 'power2.inOut' });
+          },
+          onLeaveBack: () => {
+            gsap.to(scene.views[1], { height: 0, bottom: 0, duration: 0.8, ease: 'power2.inOut' });
+            gsap.to(scene.views[0], { height: 1, bottom: 0, duration: 0.8, ease: 'power2.inOut' });
+          },
+          onLeave: () => {
+            gsap.to(scene.views[1], { height: 0, bottom: 0, duration: 0.8, ease: 'power2.inOut' });
+            gsap.to(scene.views[0], { height: 1, bottom: 0, duration: 0.8, ease: 'power2.inOut' });
+          },
+        });
+
+        ScrollTrigger.create({
+          trigger: '#wire-section',
+          start: 'top 60%',
+          onEnter: () => {
+            gsap.to('.wire-stat', { autoAlpha: 1, y: 0, duration: 1.0, ease: 'expo.out' });
+            gsap.to('.wire-label', { autoAlpha: 1, duration: 0.8, delay: 0.4 });
+          },
+        });
+
+        ScrollTrigger.create({
+          trigger: '#cta-section',
+          start: 'top 70%',
+          onEnter: () => {
+            gsap.to('#cta-section h2', { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power2.out' });
+            gsap.to('.cta-links', { autoAlpha: 1, y: 0, duration: 0.7, delay: 0.3 });
+          },
+        });
+
+        document.querySelectorAll('.content h2, .content p').forEach(el => {
+          ScrollTrigger.create({
+            trigger: el,
+            start: 'top 82%',
+            onEnter: () => gsap.to(el, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power2.out' }),
+          });
+        });
+
+        ScrollTrigger.create({
+          trigger: '#final',
+          start: 'top 75%',
+          onEnter: () => {
+            gsap.to('#final h1', { autoAlpha: 1, y: 0, duration: 1.2, ease: 'expo.out' });
+            gsap.to('#final p', { autoAlpha: 1, duration: 0.8, delay: 0.5 });
+          },
+        });
+      }
+
+      loadModel();
+    </script>
   </body>
+</html>
+

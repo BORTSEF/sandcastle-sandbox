@@ -5,7 +5,7 @@
     "baseColor": "neutral",
     "cssVariables": true
   },
-  "componentDir": "src/components",
+  "componentDir": "src/components/starwind/button",
   "utilsDir": "src/lib/utils",
   "components": [
     {
